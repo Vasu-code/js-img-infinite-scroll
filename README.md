@@ -1,0 +1,1 @@
+Single page displaying grid of images loaded from public API - https://dog.ceo/api/breeds/image/random. The infinite list scroll allow users to continuously view list of images without having to click through traditional pagination
