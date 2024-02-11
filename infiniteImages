@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infinite Scroll</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    #image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      padding: 16px;
+    }
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+<div id="image-grid"></div>
+
+<script>
+  const imageGrid = document.getElementById('image-grid');
+  let page = 1;
+
+  const fetchImages = async () => {
+    const apiUrl = `https://dog.ceo/api/breeds/image/random/10?page=${page}`;
+    
+    try {
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+
+      if (data.status === 'success') {
+        const images = data.message;
+        images.forEach(imageUrl => {
+          const img = document.createElement('img');
+          img.src = imageUrl;
+          imageGrid.appendChild(img);
+        });
+        page++;
+      }
+    } catch (error) {
+      console.error('Error fetching images:', error);
+    }
+  };
+
+  const handleScroll = () => {
+    const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+    
+    if (scrollTop + clientHeight >= scrollHeight - 10) {
+      fetchImages();
+    }
+  };
+
+  window.addEventListener('scroll', handleScroll);
+
+  // Initial load
+  fetchImages();
+</script>
+
+</body>
+</html>
